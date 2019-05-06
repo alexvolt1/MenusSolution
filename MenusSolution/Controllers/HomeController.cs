@@ -28,9 +28,11 @@ namespace MenusSolution.Controllers
 
         public IActionResult TestPartial()
         {
-            var menuItems = MenuHelper.GetAllMenuItemsMS();
+            //var menuItems = MenuHelper.GetAllMenuItemsEntity();
             //return View(GetMenu(menuItems, null));
-            return PartialView("_Layout", MenuHelper.GetMenu(menuItems, null));
+            //return PartialView("_Layout", MenuHelper.GetMenu(menuItems, null));
+
+            return null;
 
             //return View();
         }

@@ -7,6 +7,8 @@ using Dapper;
 using Microsoft.Data.Sqlite;
 using System.IO;
 using System.Data.SqlClient;
+using MenusSolution.Models.ViewModels;
+using MenusSolution.Data;
 
 namespace MenusSolution.Models
 {
@@ -35,7 +37,7 @@ namespace MenusSolution.Models
         {
             List<Menu> menuList = new List<Menu>();
 
-            using (SqlConnection cn = new SqlConnection("Server=DESKTOP-UKJJB1E\\WINSQL;Database=TestMenu;User Id=test;password=Test1663$!;Trusted_Connection=False;MultipleActiveResultSets=true;"))
+            using (SqlConnection cn = new SqlConnection("Server=AVOLT10L\\AVOLT10L;Database=TestMenu;Trusted_Connection=True;MultipleActiveResultSets=true;"))
             {
                 cn.Open();
                 SqlCommand sqlCommand = new SqlCommand("SELECT * FROM [TestMenu].[dbo].[Menu]", cn);
@@ -47,7 +49,7 @@ namespace MenusSolution.Models
                     menu.ParentID = (reader["ParentID"] == DBNull.Value) ? null : reader["ParentID"].ToString();
                     menu.Content = (string)reader["Content"];
                     menu.IconClass = (string)reader["IconClass"];
-                    menu.Href = (string)reader["Url"];
+                    menu.Href = (string)reader["Href"];
 
                     menuList.Add(menu);
                 }
