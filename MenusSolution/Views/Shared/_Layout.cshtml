@@ -1,9 +1,8 @@
-﻿
+﻿@using MenusSolution.Helpers
 @{
 
     var menuItems = MenuHelper.GetAllMenuItemsMS();
     var listMenuItems = MenuHelper.GetMenu(menuItems, null);
-
 }
 <!DOCTYPE html>
 <html>
@@ -49,16 +48,12 @@
     <div class="container">
         <partial name="_CookieConsentPartial" />
 
-
-
         <main role="main" class="pb-3">
 
             <ul class="sidebar-menu" data-widget="tree">
                 @*@Html.Partial("_TestPartial", listMenuItems)*@
 
-                <cache expires-sliding="@TimeSpan.FromSeconds(60)">
-                    <partial name="_TestPartial" model="listMenuItems" />
-                </cache>
+                <partial name="_TestPartial" model="listMenuItems" />
             </ul>
 
             @RenderBody()

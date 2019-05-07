@@ -9,22 +9,50 @@ using MenusSolution.Data;
 using MenusSolution.Models;
 using MenusSolution.Models.ViewModels;
 using System.Text;
+using Microsoft.Extensions.Caching.Memory;
+using MenusSolution.Helpers;
+using System.Data.SqlClient;
 
 namespace MenusSolution.Controllers
 {
     public class MenusController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMemoryCache _cache;
 
-        public MenusController(ApplicationDbContext context)
+        public MenusController(ApplicationDbContext context, IMemoryCache memoryCache)
         {
             _context = context;
+            _cache = memoryCache;
         }
 
         // GET: Menus
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Menu.ToListAsync());
+            IEnumerable<Menu> cacheEntry;
+
+            //IEnumerable<Menu> cachedMenu;
+
+            // Look for cache key.
+            if (!_cache.TryGetValue(CacheKeys.Entry, out cacheEntry))
+            {
+                // Key not in cache, so get data.
+                cacheEntry = await _context.Menu.ToListAsync();
+
+                // Set cache options.
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                    // Keep in cache for this time, reset time if accessed.
+                    .SetSlidingExpiration(TimeSpan.FromSeconds(15));
+
+                // Save data in cache.
+                _cache.Set(CacheKeys.Entry, cacheEntry, cacheEntryOptions);
+            }
+
+            return View(cacheEntry);
+
+
+
+            //return View(await _context.Menu.ToListAsync());
         }
 
         // GET: Menus/Details/5
@@ -159,8 +187,7 @@ namespace MenusSolution.Controllers
         }
         public IActionResult Model()
         {
-            //var menuItems = MenuHelper.GetAllMenuItems();
-            var menuItems = MenuHelper.GetAllMenuItemsMS();
+            var menuItems = GetAllMenuItemsMS();
             return View("Model", MenuHelper.GetMenu(menuItems, null));
         }
 
@@ -216,5 +243,44 @@ namespace MenusSolution.Controllers
             return builder.ToString();
         }
 
+        public IList<Menu> GetAllMenuItemsMS()
+        {
+            MenuHelper mh = new MenuHelper();
+            List<Menu> menuList = new List<Menu>();
+            IList<Menu> cacheEntry;
+
+
+            if (!_cache.TryGetValue(CacheKeys.Entry, out cacheEntry))
+            {
+
+                using (SqlConnection cn = new SqlConnection("Server=DESKTOP-UKJJB1E\\WINSQL;Database=TestMenu;Trusted_Connection=True;MultipleActiveResultSets=true;"))
+                {
+                    cn.Open();
+                    SqlCommand sqlCommand = new SqlCommand("SELECT * FROM [TestMenu].[dbo].[Menu]", cn);
+                    SqlDataReader reader = sqlCommand.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Menu menu = new Menu();
+                        menu.ID = (string)reader["ID"];
+                        menu.ParentID = (reader["ParentID"] == DBNull.Value) ? null : reader["ParentID"].ToString();
+                        menu.Content = (string)reader["Content"];
+                        menu.IconClass = (string)reader["IconClass"];
+                        menu.Href = (string)reader["Href"];
+
+                        menuList.Add(menu);
+                    }
+                    cacheEntry = menuList;
+
+                    var cacheEntryOptions = new MemoryCacheEntryOptions()
+                        // Keep in cache for this time, reset time if accessed.
+                        .SetSlidingExpiration(TimeSpan.FromSeconds(15));
+
+                    // Save data in cache.
+                    _cache.Set(CacheKeys.Entry, cacheEntry, cacheEntryOptions);
+                    cn.Close();
+                }
+            }
+            return cacheEntry;
+        }
     }
 }

@@ -9,12 +9,15 @@ using System.IO;
 using System.Data.SqlClient;
 using MenusSolution.Models.ViewModels;
 using MenusSolution.Data;
+using MenusSolution.Models;
+using Microsoft.Extensions.Caching.Memory;
 
-namespace MenusSolution.Models
+namespace MenusSolution.Helpers
 {
     public class MenuHelper
     {
-        private static string connStr =$"DataSource ={ Path.Combine(Directory.GetCurrentDirectory(),"demo.db")}";        
+        private static string connStr =$"DataSource ={ Path.Combine(Directory.GetCurrentDirectory(),"demo.db")}";
+
         public static IList<Menu> GetAllMenuItems()
         {
             Console.WriteLine(connStr);
@@ -37,25 +40,25 @@ namespace MenusSolution.Models
         {
             List<Menu> menuList = new List<Menu>();
 
-            using (SqlConnection cn = new SqlConnection("Server=AVOLT10L\\AVOLT10L;Database=TestMenu;Trusted_Connection=True;MultipleActiveResultSets=true;"))
-            {
-                cn.Open();
-                SqlCommand sqlCommand = new SqlCommand("SELECT * FROM [TestMenu].[dbo].[Menu]", cn);
-                SqlDataReader reader = sqlCommand.ExecuteReader();
-                while (reader.Read())
+                using (SqlConnection cn = new SqlConnection("Server=DESKTOP-UKJJB1E\\WINSQL;Database=TestMenu;Trusted_Connection=True;MultipleActiveResultSets=true;"))
                 {
-                    Menu menu = new Menu();
-                    menu.ID = (string)reader["ID"];
-                    menu.ParentID = (reader["ParentID"] == DBNull.Value) ? null : reader["ParentID"].ToString();
-                    menu.Content = (string)reader["Content"];
-                    menu.IconClass = (string)reader["IconClass"];
-                    menu.Href = (string)reader["Href"];
+                    cn.Open();
+                    SqlCommand sqlCommand = new SqlCommand("SELECT * FROM [TestMenu].[dbo].[Menu]", cn);
+                    SqlDataReader reader = sqlCommand.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Menu menu = new Menu();
+                        menu.ID = (string)reader["ID"];
+                        menu.ParentID = (reader["ParentID"] == DBNull.Value) ? null : reader["ParentID"].ToString();
+                        menu.Content = (string)reader["Content"];
+                        menu.IconClass = (string)reader["IconClass"];
+                        menu.Href = (string)reader["Href"];
 
-                    menuList.Add(menu);
+                        menuList.Add(menu);
+                    }
+                    cn.Close();
                 }
-                cn.Close();
-                return menuList;
-            }
+            return menuList;
         }
 
         public static IList<Menu> GetChildrenMenu(IList<Menu> menuList, string parentId = null)
