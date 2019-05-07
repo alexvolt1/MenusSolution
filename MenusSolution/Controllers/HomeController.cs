@@ -5,23 +5,31 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MenusSolution.Models;
+using MenusSolution.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace MenusSolution.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly ApplicationDbContext _context;
         //public MenuViewModel MenuViewModel { get; set; }
-        public HomeController()
+        public HomeController(ApplicationDbContext context)
         {
+            _context = context;
             //TestPartial();
+            _context.Database.EnsureCreated();
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             //var menuItems = MenuHelper.GetAllMenuItemsMS();
 
             //return View(GetMenu(menuItems, null));
 
-           //TestPartial();
+            //TestPartial();
+            //var model = await _context.Menu.ToListAsync();
+            //return View(model);
+
             return View();
         }
 

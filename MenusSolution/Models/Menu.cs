@@ -12,7 +12,7 @@ namespace MenusSolution.Models
         public string Content { get; set; }
         public string IconClass { get; set; }
         public string Href { get; set; }
-        public long Order { get; set; }
+        public int Order { get; set; }
     }
 
 }

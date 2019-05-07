@@ -1,8 +1,16 @@
-﻿@{
+﻿@*@using MenusSolution.Models
+    @model IEnumerable<TodoItem>*@
+@model IEnumerable<MenusSolution.Models.Menu>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
+
+    <div>
+        @await Component.InvokeAsync("PriorityList", new { maxPriority = 3, isDone = false })
+    </div>
 
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>

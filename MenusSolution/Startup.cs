@@ -36,6 +36,9 @@ namespace MenusSolution
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            //services.AddDbContext<ApplicationDbContext>(options =>
+            //        options.UseInMemoryDatabase("db"));
+
             services.AddMemoryCache();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);

@@ -40,7 +40,7 @@ namespace MenusSolution.Helpers
         {
             List<Menu> menuList = new List<Menu>();
 
-                using (SqlConnection cn = new SqlConnection("Server=DESKTOP-UKJJB1E\\WINSQL;Database=TestMenu;Trusted_Connection=True;MultipleActiveResultSets=true;"))
+                using (SqlConnection cn = new SqlConnection("Server=AVOLT10L\\AVOLT10L;Database=TestMenu;Trusted_Connection=True;MultipleActiveResultSets=true;"))
                 {
                     cn.Open();
                     SqlCommand sqlCommand = new SqlCommand("SELECT * FROM [TestMenu].[dbo].[Menu]", cn);
