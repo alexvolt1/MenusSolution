@@ -16,9 +16,9 @@ namespace MenusSolution.Controllers
         //public MenuViewModel MenuViewModel { get; set; }
         public HomeController(ApplicationDbContext context)
         {
-            _context = context;
-            //TestPartial();
-            _context.Database.EnsureCreated();
+            //_context = context;
+            ////TestPartial();
+            //_context.Database.EnsureCreated();
         }
         public async Task<IActionResult> Index()
         {

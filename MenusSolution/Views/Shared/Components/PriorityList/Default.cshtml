@@ -5,6 +5,12 @@
     var listMenuItems = MenuHelper.GetMenu(Model, null);
 }
 
+<style>
+    .sidebar-menu a{
+        border:red 1px solid;
+    }
+</style>
+
 <h3>Priority Items</h3>
 <ul class="sidebar-menu" data-widget="tree">
     @*@Html.Partial("_TestPartial", listMenuItems)*@

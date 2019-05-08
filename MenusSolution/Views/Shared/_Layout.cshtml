@@ -1,8 +1,8 @@
 ﻿@using MenusSolution.Helpers
 @{
 
-    var menuItems = MenuHelper.GetAllMenuItemsMS();
-    var listMenuItems = MenuHelper.GetMenu(menuItems, null);
+//var menuItems = MenuHelper.GetAllMenuItemsMS();
+//var listMenuItems = MenuHelper.GetMenu(menuItems, null);
 }
 <!DOCTYPE html>
 <html>
@@ -53,7 +53,7 @@
             <ul class="sidebar-menu" data-widget="tree">
                 @*@Html.Partial("_TestPartial", listMenuItems)*@
 
-                <partial name="_TestPartial" model="listMenuItems" />
+                @*<partial name="_TestPartial" model="listMenuItems" />*@
             </ul>
 
             @RenderBody()
