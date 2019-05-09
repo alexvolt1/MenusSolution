@@ -66,19 +66,9 @@ namespace MenusSolution.Helpers
             return menuList.Where(x => x.ParentID == parentId).OrderBy(x => x.Order).ToList();
         }
 
-        public static IList<NavigationList> GetChildrenMenuNavList(IList<NavigationList> menuList, string parentId = null)
-        {
-            return menuList.Where(x => x.ParentId == parentId).ToList();
-        }
-
         public static Menu GetMenuItem(IList<Menu> menuList, string id)
         {
             return menuList.FirstOrDefault(x => x.ID == id);
-        }
-
-        public static NavigationList GetMenuItemNavList(IList<NavigationList> menuList, string id)
-        {
-            return menuList.FirstOrDefault(x => x.Id == id);
         }
 
         public static IList<MenuViewModel> GetMenu(IList<Menu> menuList, string parentId)
@@ -102,33 +92,6 @@ namespace MenusSolution.Helpers
                 vm.IconClass = menu.IconClass;
                 vm.Href = menu.Href;
                 vm.Children = GetMenu(menuList, menu.ID);
-
-                vmList.Add(vm);
-            }
-
-            return vmList;
-        }
-
-        public static IList<NavigationListViewModel> GetMenuNavList(IList<NavigationList> menuList, string parentId)
-        {
-            var children = MenuHelper.GetChildrenMenuNavList(menuList, parentId);
-
-            if (!children.Any())
-            {
-                return new List<NavigationListViewModel>();
-            }
-
-            var vmList = new List<NavigationListViewModel>();
-            foreach (var item in children)
-            {
-                var menu = MenuHelper.GetMenuItemNavList(menuList, item.Id);
-
-                var vm = new NavigationListViewModel();
-
-                vm.Id = menu.Id;
-                vm.DefaultName = menu.DefaultName;
-                vm.ImageUrl = menu.ImageUrl;
-                vm.Children = GetMenuNavList(menuList, menu.Id);
 
                 vmList.Add(vm);
             }

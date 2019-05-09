@@ -1,0 +1,16 @@
+﻿@model IList<MenusSolution.Models.NavigationList>
+@*@model IList<MenusSolution.Models.Menu>*@
+@using MenusSolution.Helpers
+@{
+
+    var listMenuItems = MenuHelper.GetMenuNavList(Model, "00000000-0000-0000-0000-000000000000");
+    //var listMenuItems = MenuHelper.GetMenu(Model, "00000000-0000-0000-0000-000000000000");
+}
+
+<h3>Priority Items</h3>
+<ul class="sidebar-menu" data-widget="tree">
+    @*@Html.Partial("_TestPartial", listMenuItems)*@
+
+    <partial name="_NavListPartial" model="listMenuItems" />
+</ul>
+

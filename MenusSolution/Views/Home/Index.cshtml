@@ -9,7 +9,8 @@
 <div class="text-center">
 
     <div>
-        @await Component.InvokeAsync("PriorityList", new { maxPriority = 3, isDone = false })
+        @*@await Component.InvokeAsync("PriorityList", new { maxPriority = 3, isDone = false })*@
+        @await Component.InvokeAsync("NavigationList", new { maxPriority = 3, isDone = false })
     </div>
 
     <h1 class="display-4">Welcome</h1>

@@ -34,5 +34,7 @@ namespace MenusSolution.Data
         }
 
         public virtual DbSet<Menu> Menu { get; set; }
+
+        public virtual DbSet<NavigationList> NavigationList { get; set; }
     }
 }
